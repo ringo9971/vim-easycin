@@ -40,7 +40,6 @@ function! easycin#easycin() abort
       let s:j    = matchstr(s:line[1], '(.\{-})')[1:-2]
 
       let s:out = 'REP(i, ' . s:i . ') REP(j, ' . s:j .') cin >> ' . s:name .'[i][j];'
-      echo s:out
     endif
   else
     return
