@@ -5,10 +5,10 @@ set cpo&vim
 
 function! easycin#easycin() abort
   let s:line = getline('.')
-  let s:text = matchstr(s:line, '\(int\|string\|char\|vector\)', 'g')
+  let s:text = matchstr(s:line, '\(int\|string\|char\|double\|vector\)', 'g')
 
 
-  if s:text ==# 'int' || s:text ==# 'string' || s:text ==# 'char'
+  if s:text ==# 'int' || s:text ==# 'string' || s:text ==# 'char' || s:text ==# 'double'
     let s:line = split(s:line, ' ')[1:]
 
     let s:out = 'cin >> '
