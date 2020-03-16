@@ -9,7 +9,8 @@ endif
 let g:loaded_easycin = 1
 
 
-command! Inputcin call easycin#easycin()
+command! Easycin call easycin#easycin()
+
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
