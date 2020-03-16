@@ -4,22 +4,50 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! easycin#easycin() abort
-  let s:line = getline('.') 
-  let s:text = matchstr(s:line, '\(int\|string\|char\)', 'g')
+  let s:line = getline('.')
+  let s:text = matchstr(s:line, '\(int\|string\|char\|vector\)', 'g')
 
 
   if s:text ==# 'int' || s:text ==# 'string' || s:text ==# 'char'
-    let s:out = 'cin >> '
     let s:line = split(s:line, ' ')[1:]
 
+    let s:out = 'cin >> '
     for i in s:line
       let s:out .= i[:-2] . ' >> '
     endfor
-    let s:out = s:out[:-5] . ';'
+    let s:out = s:out[:-5] .';'
 
-    call append(line('.'), s:out)
-    normal +=h 
+  elseif s:text ==# 'vector'
+    if count(s:line, 'vector') == 1
+      let s:line = split(s:line, ' ')[1:]
+
+      let s:name = []
+      for i in s:line
+        let s:num = matchstr(i, '(.\{-})', 'g')[1:-2]
+        call add(s:name, matchstr(i, '.\{-}(', 'g')[:-2])
+      endfor
+
+      let s:out = 'REP(i, ' . s:num . ') cin >> '
+      for i in s:name
+        let s:out .= i . '[i] >> '
+      endfor
+      let s:out = s:out[:-5] .';'
+
+    elseif count(s:line, 'vector') == 3
+      let s:line = split(s:line, ' ')[1:]
+      let s:name = matchstr(s:line[0], '.\{-}(')[:-2]
+      let s:i    = matchstr(s:line[0], '(.\{-},')[1:-2]
+      let s:j    = matchstr(s:line[1], '(.\{-})')[1:-2]
+
+      let s:out = 'REP(i, ' . s:i . ') REP(j, ' . s:j .') cin >> ' . s:name .'[i][j];'
+      echo s:out
+    endif
+  else
+    return
   endif
+
+  call append(line('.'), s:out)
+  normal +=h 
 endfunction
 
 let &cpo = s:save_cpo
