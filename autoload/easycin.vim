@@ -6,7 +6,7 @@ set cpo&vim
 function! easycin#easycin() abort
   let s:line = getline('.')
   let s:text = matchstr(s:line, '\(int\|string\|char\|double\|vector\)', 'g')
-
+  let s:is_pair = v:false
 
   if s:text ==# 'int' || s:text ==# 'string' || s:text ==# 'char' || s:text ==# 'double'
     let s:line = split(s:line, ' ')[1:]
@@ -19,7 +19,12 @@ function! easycin#easycin() abort
 
   elseif s:text ==# 'vector'
     if count(s:line, 'vector') == 1
-      let s:line = split(s:line, ' ')[1:]
+      if count(s:line, 'pair') == 1
+        let s:line = split(s:line, ' ')[2:]
+        let s:is_pair = v:true
+      else
+        let s:line = split(s:line, ' ')[1:]
+      endif
 
       let s:name = []
       for i in s:line
@@ -29,7 +34,11 @@ function! easycin#easycin() abort
 
       let s:out = 'REP(i, ' . s:num . ') cin >> '
       for i in s:name
-        let s:out .= i . '[i] >> '
+        if s:is_pair
+          let s:out .= i . '[i].first >> ' . i . '[i].second >> '
+        else
+          let s:out .= i . '[i] >> '
+        endif
       endfor
       let s:out = s:out[:-5] .';'
 
